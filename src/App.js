@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 
-
 function App() {
   let tempJSON = {
     array : []
@@ -11,6 +10,10 @@ function App() {
     array : JSON.parse(localStorage.getItem("thisArray")).array
   });
   const [error, setError] = useState();
+  const [buttonState, setButtonState] = useState({
+    stage : "Start",
+    color : "success"
+  })
 
   let addToList = e => {
     e.preventDefault();
@@ -54,7 +57,57 @@ function App() {
     localStorage.clear()
   }
 
+  const defineCSS = () => {
+    return `<style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    img {
+      width: 100%;
+      height: auto;
+    }
+    </style>`
+  }
 
+  const defineHTML = () => {
+    return `<div class = "content">
+    <img src = "https://media.makeameme.org/created/padh-le-bhai.jpg">
+    </div>`
+  }
+
+
+
+
+
+
+
+  const startStopBlocker = () => {
+      if(buttonState.stage === "Start"){
+          setButtonState({
+              stage : "Stop",
+              color : "danger"
+          })
+        const set = new Set(sites.array);
+        if(set.has(window.location.hostname)){
+          document.head.innerHTML = defineCSS();
+          document.body.innerHTML = defineHTML();
+        }
+      }
+      else
+      {
+          setButtonState({
+              stage : "Start",
+              color : "success"
+          })
+      }
+
+
+}
 
   return (
     <div className='container my-5 text-center'>
@@ -71,7 +124,11 @@ function App() {
           })}
         </ul>
       </div>
-      <button className='btn btn-dark' onClick={clearArray}>Clear</button>
+      <div className='d-flex justify-content-center'>
+        <button className='btn btn-dark mx-3' onClick={clearArray}>Clear</button>
+        <button onClick={startStopBlocker} className={`btn btn-${buttonState.color} mx-3`}>{buttonState.stage}</button>
+      </div>
+    
     </div>
   );
 }
